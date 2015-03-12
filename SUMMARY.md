@@ -212,8 +212,8 @@ args.putString("customerId", unique_customer_id); // eg: "cust_1221232"
 args.putString("displayNote", "Custom note to display during transaction"); // eg: "Recharging 9829880096 with Rs. 10"
 args.putString("remarks", "Custom remark to auto-fill on bank page"); // eg: "Transaction at Juspay Recharge"
 args.putString("amount", transaction_amount); // eg: "10"
-args.putString("customerEmail", customer_email);
-args.putString("customerPhoneNumber", customer_phone_number);
+args.putString("customerEmail", customer_email); // eg: "support@juspay.in"
+args.putString("customerPhoneNumber", customer_phone_number); // eg: "9829880096"
 args.putSerializable("card_brand", CardBrand.VISA);
 args.putSerializable("card_type", CardType.CREDIT_CARD);
 args.putString("udf_operator", recharge_operator);
