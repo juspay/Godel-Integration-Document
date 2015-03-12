@@ -204,14 +204,14 @@ Clients must make sure to add these required metrics while invoking JuspayBrowse
 
 ```
 Bundle args = new Bundle();
-args.putString("url", "https://www.merchant-website.com");
-args.putString("merchantId", your_merchant_id);
-args.putString("transactionId", unique_transaction_id);
-args.putString("clientId", your_client_id);
-args.putString("customerId", unique_customer_id);
-args.putString("displayNote", "Custom note to display during transaction");
-args.putString("remarks", "Custom remark to auto-fill on bank page");
-args.putString("amount", transaction_amount);
+args.putString("url", "https://www.merchant-website.com"); 
+args.putString("merchantId", your_merchant_id); // eg: "juspay_recharge"
+args.putString("transactionId", unique_transaction_id); // eg "123aba321"
+args.putString("clientId", your_client_id); // eg: "juspay_recharge_android"
+args.putString("customerId", unique_customer_id); // eg: "cust_1221232"
+args.putString("displayNote", "Custom note to display during transaction"); // eg: "Recharging 9829880096 with Rs. 10"
+args.putString("remarks", "Custom remark to auto-fill on bank page"); // eg: "Transaction at Juspay Recharge"
+args.putString("amount", transaction_amount); // eg: "10"
 args.putString("customerEmail", customer_email);
 args.putString("customerPhoneNumber", customer_phone_number);
 args.putSerializable("card_brand", CardBrand.VISA);
