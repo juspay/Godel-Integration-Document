@@ -171,3 +171,53 @@ browserFragment.setArguments(args);
 
 This will first fetch the ACS url from juspay servers and then load the 3D secure page directly. This is assuming that the PG backend supports this. In other cases, we will follow the redirection mode.  If you would like to do the part on loading the acs url yourself or would like to direct the user to a third party url (Like PayU, Citrus etc) which will inturn direct them to the acs page see Strategy#1 and Strategy#2.
 
+## Parameters
+
+Clients must make sure to add these required metrics while invoking JuspayBrowserFragmet. These metrics are crucial for the transaction to complete and have seamless analytics. Find below the set of parameters which can be passed to us:
+
+|  Variable             | Description                                                                                                                                 | Required |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| merchantId            | Indicates the merchantId                                                                                                                    | Yes      |
+| clientId              | ClientID created in Merchant Portal                                                                                                         | Yes      |
+| transactionId         | Indicates the transactionId                                                                                                                 | Yes      |
+| orderId               | OrderID of the transaction                                                                                                                  | No       |
+| customerId            | Unique identifier of the customer                                                                                                           | No       |
+| displayNote           | Short note about transaction                                                                                                                | No       |
+| remarks               | Remarks about transaction. This will automatically be filled up in the bank page.                                                           | No       |
+| amount                | Amount of the transaction                                                                                                                   | No       |
+| customerEmail         | Customer's email address                                                                                                                    | No       |
+| customerPhoneNumber   | Customer's phone number                                                                                                                     | No       |
+| progressDialogEnabled | If passed as false, juspay’s custom progress dialogs would not be shown while a page is loaded. Pass true to let juspay handle the dialogs. | No       |
+| showJuspayAutoHelp    | If true, we show a help screen automatically on the first use of the library. Set argument to false if you dont want to show the help       | No       |
+| card_brand            | This argument contains enums like MasterCard, Visa, Maestro, etc                                                                            | No       |
+| card_type             | Indicates type of card used i.e. debit or credit                                                                                            | No       |
+
+## Custom Parameters
+
+|  Variable  | Description                  | Required |
+| ---------- | ---------------------------- | -------- |
+| udf_:var1  | Custom Field                 | No       |
+| udf_:var2  | Custom Field                 | No       |
+| udf_:var3  | Custom Field                 | No       |
+| udf_:var4  | Custom Field                 | No       |
+| udf_:var5  | Custom Field                 | No       |
+
+```
+Bundle args = new Bundle();
+args.putString("url", "https://www.merchant-website.com");
+args.putString("merchantId", your_merchant_id);
+args.putString("transactionId", unique_transaction_id);
+args.putString("clientId", your_client_id);
+args.putString("customerId", unique_customer_id);
+args.putString("displayNote", "Recharging 9962881912 for Rs. 100");
+args.putString("remarks", "Recharging 9962881912 for Rs. 100");
+args.putString("amount", rechargeRequest.getAmount());
+args.putString("customerEmail", "");
+args.putString("customerPhoneNumber", rechargeRequest.getMobileNumber());
+args.putSerializable("card_brand", CardBrand.VISA);
+args.putSerializable("card_type", CardType.CREDIT_CARD);
+args.putString("udf_operator", rechargeRequest.getOperator());
+args.putString("udf_circle", rechargeRequest.getCircle());
+args.putString("udf_type", "prepaid");
+browserFragment.setArguments(args);
+```
