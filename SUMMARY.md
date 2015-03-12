@@ -79,3 +79,95 @@ cp $GODEL_LIBRARY_PATH/assets/* $PROJECT_HOME/src/main/assets
 ```
 
 You should add appcompat-v4 from Google SDK as a library project as well.
+
+# How Godel Works
+
+
+In the normal flow, you would simply include the WebView in the view XML of your activity/fragment and load the URL (or postURL). Godel encapsulates the WebView into a fragment and all our enhancements are driven through this.
+
+To integrate with Godel, you will replace the existing WebView with our Fragment. You could directly include the Fragment as is or use a FrameLayout to inject it later.
+
+## JuspayBrowserFragment
+
+You have to instantiate this Fragment in place of the existing WebView. The below code achieves that. Once this code is added to the view file, you can access this in the onCreate method of your Activity. The Fragment can be initialized in different ways. Each of these ways is explained in the upcoming sections.
+
+```
+<fragment android:name="in.juspay.godel.ui.JuspayBrowserFragment"
+    android:id="@+id/juspayBrowserFragment"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent" />
+```
+
+
+To get hold of the WebView that is present inside this Fragment, you can invoke getWebView() on the Fragment which would return an instance of JuspayWebView. 
+
+## Initializing the JuspayBrowserFragment
+
+There are three ways of initializing the Juspay browser. 
+Strategy #1 and #2 can be used by anyone (If you are not registered with JusPay simply set orderId as your Payment ID).
+Strategy #3 is only applicable to merchants registered with Juspay. 
+
+### Strategy #1: Start BrowserFragment using payment URL
+
+```
+Bundle args = new Bundle();
+args.putString("merchantId", merchantId);
+args.putString("orderId", orderId));
+args.putString("url", url);
+browserFragment.setArguments(args);
+```
+
+Should you need to **POST the data** to a URL, you can pass the HTTP payload in another parameter and we will initialize the session with HTTP POST. Example:
+
+```
+Bundle args = new Bundle();
+args.putString("merchantId", merchantId);
+args.putString("orderId", orderId));
+args.putString("url", url);
+args.putString("postData", postData);
+browserFragment.setArguments(args);
+```
+
+### Strategy #2: Start BrowserFragment with ACS information
+
+If you have obtained the **ACS information** yourself, you can set the parameters as shown below. This will have the benefit of cutting down one redirection from the payment flow. Whenever the backend supports this, we recommend that you follow this technique.
+
+```
+Bundle args = new Bundle();
+args.putString("acs_url", acsUrl);
+args.putString("term_url", termUrl);
+args.putString("md", md);
+args.putString("pareq", pareq);
+args.putString("merchantId", juspayMerchantId);
+args.putString("orderId", orderId);
+browserFragment.setArguments(args);
+```
+
+### Strategy #3: Start BrowserFragment using Order and Card information 
+
+This is applicable when you are using **Juspay's Payment Gateway** in the backend. Assuming you have collected the card information from the user, you can launch the fragment as follows:
+
+```
+Card card = new Card(cardNumber, cardExpiryMonth, cardExpiryYear);
+card.setCVV(cvv);
+Bundle args = new Bundle();
+args.putString("merchantId", juspayMerchantId);
+args.putString("orderId", orderId));
+args.putString("card", card);
+browserFragment.setArguments(args);
+```
+
+If you are using **Juspay to store your cards** you can launch the browser using a stored card token as follows:
+
+```
+StoredCard card = new StoredCard(cardToken, cardNumberMask, expiryMonth, expiryYear);
+card.setCVV(cvv);
+Bundle args = new Bundle();
+args.putString("merchantId", juspayMerchantId);
+args.putString("orderId", orderId));
+args.putString("card", card);
+browserFragment.setArguments(args);
+```
+
+This will first fetch the ACS url from juspay servers and then load the 3D secure page directly. This is assuming that the PG backend supports this. In other cases, we will follow the redirection mode.  If you would like to do the part on loading the acs url yourself or would like to direct the user to a third party url (Like PayU, Citrus etc) which will inturn direct them to the acs page see Strategy#1 and Strategy#2.
+
