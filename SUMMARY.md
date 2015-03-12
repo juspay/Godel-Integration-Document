@@ -1,7 +1,7 @@
 # Summary
 
 * [Introduction](README.md)
-* [Getting started](1.1.md)
+* [Getting started](1.md)
    * [Platform & API Level support](1.1.md)
    * [Android Permissions](1.2.md)
    * [Manifest file changes](1.3.md)
