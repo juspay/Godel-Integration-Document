@@ -227,9 +227,147 @@ Once this code is added to the view file, you can access this in the onCreate me
     android:layout_height="match_parent" />
 ```
 
-When embedding the Fragment directly in view file, there is no way to pass the Bundle to the Fragment. However, the WebView should be initialized by you directly. 
+When embedding the Fragment directly in view file, you can pass the bundle by using the method ***JuspayBrowserFragment#startPaymentWithArguments***.
 
-JuspayBrowserFragment browserFragment = (JuspayBrowserFragment) findById(R.id.fragment);
-WebView webView = browserFragment.getWebView();
-webView.loadUrl(paymentAuthenticationUrl);
+```
+JuspayBrowserFragment browserFragment = (JuspayBrowserFragment) getSupportFragmentManager().findFragmentById(R.id.juspay_browser_fragment);
+browserFragment.startPaymentWithArguments(initBundle);
+```
 
+Here ***initBundle*** contains the key-value pairs as stated in above sections.
+
+## Using Fragment Manager
+
+When using this method, the view XML is expected to contain a FrameLayout which acts as the container to the Fragment. 
+
+```
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:ignore="MergeRootFrame" />
+```
+
+Create an instance of JuspayBrowserFragment and initialize it with one of the three strategies outlined above. Example:
+
+```
+JuspayBrowserFragment juspayBrowserFragment = new JuspayBrowserFragment();
+juspayBrowserFragment.setArguments(initBundle);
+```
+
+To activate the Fragment inside this Layout, add the Fragment to the View using the FragmentSupportManager as shown below. The transition is optional. It simply adds to the effect. You can modify or remove it, if needed.
+
+```
+FragmentTransaction transaction = this.getSupportFragmentManager().beginTransaction();
+transaction.replace(R.id.container, juspayBrowserFragment);
+transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+transaction.commit();
+```
+
+# Accessing JuspayWebView from JuspayBrowserFragment
+
+If you want to gain access to JuspayWebView, you can use the callback interface which is called as soon as webview is ready. To set it up you can follow this code snippet below:
+
+```
+JuspayWebviewCallback juspayWebviewCallback = new JuspayWebviewCallback() {
+        @Override
+        public void webviewReady() {
+            JuspayWebView webView = browserFragment.getWebView();
+            webView.setWebViewClient(new CustomWebViewClient());
+        }
+};
+
+browserFragment.setupJuspayWebviewCallbackInterface(juspayWebviewCallback);
+```
+If you just want to use custom webview and webchrome client and don't need webview instance specifically, you can override the two methods below and return the appropriate client instances:
+
+```
+@Override
+protected JuspayWebChromeClient newWebChromeClient() {
+    return getCustomWebChromeClient(this);
+}
+
+@Override
+protected JuspayWebViewClient newWebViewClient(JuspayWebView juspayWebView) {
+    return getCustomWebViewClient(juspayWebView, this);
+}
+```
+
+# Custom Web Clients
+
+Since the WebView is now encapsulated by the JuspayBrowserFragment class, it gets little tricky to have control over the WebView. The WebView is manipulated by our library using the WebViewClient and WebChromeClient. To achieve this we have extended these two classes to include our logic. 
+
+In order to be able to have your logic in place (for methods like onPageStarted and onPageFinished), you will have to extend JuspayWebViewClient and JuspayWebChromeClient. However, please make sure to pass the call up (by calling on super.) on all occasions. 
+
+```
+public class CustomWebViewClient extends JuspayWebViewClient {
+    @Override
+    public void onPageFinished(WebView view, String url) {
+        super.onPageFinished(view, url);
+    }    
+}
+
+class MyWebChromeClient extends JuspayWebChromeClient {
+  // overrides
+}
+```
+
+# Track payment status
+
+As soon as the payment is over, send us the notification on the status of the payment. These responses are crucial in order to track transaction success/failure metrics. For instance:
+
+```
+GodelTracker.getInstance().trackPaymentStatus(:transactionId,
+        GodelTracker.PaymentStatus.SUCCESS);
+```
+
+
+Payment status can be one of: ***SUCCESS***, ***FAILURE*** or ***CANCELLED***.
+
+# Tracking back button press
+
+We also provide unblocking helps when the user presses the back button. This is intelligently controlled by assessing the current state of the transaction. You can call ***juspayBackPressedHandler*** in the onBackPressed method of your Activity. If you don't want Juspay to control the backbutton you can pass false as the argument in juspayBackPressedHandler, else pass true.
+
+@Override
+public void onBackPressed() {
+    browserFragment.juspayBackPressedHandler(shouldShowJuspayCloseDialog);
+    // Your code to show a dialog box if you are passing false.
+}
+
+If Juspay is unable to provide help and the user closes the transaction session using the "Cancel Transaction" dialog box, we provide a callback to the activity, ***JuspayBackButtonCallback#transactionCancelled***. Please note, this callback is not called if the user clicks any Abort/Cancel button in the webpage, this action is handled by the webpage itself.
+
+```
+JuspayBackButtonCallback backButtonCallback = new JuspayBackButtonCallback() {
+
+        @Override
+        public void transactionCancelled() {
+            finish();
+        }
+    };
+    
+browserFragment.setupJuspayBackButtonCallbackInterface(backButtonCallback);
+```
+# Was Godel used in the last transaction
+
+You can track if, for the last transaction, godel was used. You can callthis API anytime during the transaction. This would return *true* only if godel was enabled through the transaction. 
+
+```
+SessionInfo.getInstance().wasGodelEnabled()
+```
+
+# Proguard Rules
+
+In case your application uses proguard, please do specify the following rule to avoid conflicts:
+
+```
+-keep class in.juspay.** {;}
+```
+
+Merchant Checklist
+Please ensure that the following steps are accomplished to have a cleaner integration.
+1. The AndroidManifest.xml entry for the activity should say android:windowSoftInputMode="adjustResize".
+2. The activity holding the Juspay Fragment should fix the orientation as portrait.
+3. Ensure that correct value is sent for merchantId, transactionId and clientId
+4. At the end of the flow, payment status is being tracked using the call GodelTracker.trackPaymentStatus
+5. All the classes under in.juspay.godel namespace should be kept out of ProGuard optimization.
