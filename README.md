@@ -35,5 +35,35 @@ In the manifest file, for the activity that includes our fragment, please ensure
     android:name="com.example.PaymentActivity"
     android:screenOrientation="portrait"
     android:windowSoftInputMode="adjustResize">
-</activity>```
+</activity>
+```
 
+Getting the SDK
+The library can be added as a direct dependency when you use Gradle. If you don’t use Gradle, we provide a downloadable SDK which you can add as a project dependency.
+Gradle
+Add the following maven repository to the build.gradle. Please make sure that you add it in the project dependency section and NOT the buildScript section.
+
+repositories {
+    mavenCentral()
+    maven { 
+       url "https://s3-ap-southeast-1.amazonaws.com/godel-release/godel/"
+    }
+}
+
+Add the following compile dependency to your project. Here again make sure you don’t accidentally add it to script dependencies. 
+
+dependencies {
+    compile 'com.android.support:support-v4:+'
+    compile 'in.juspay:godel:0.5rc2'
+}
+Non Gradle (or Eclipse style integration) 
+
+Download the binary from this location:
+
+https://s3-ap-southeast-1.amazonaws.com/godel-release/stable/godel-0.5rc2.tar.gz
+
+This can be added directly as a project dependency in Eclipse or Intellij Idea. Besides adding  the project as a dependency, you will have to add to the assets too. Once the library is extracted into a folder, navigate to godel/assets. Add everything in the folder to your src/main/assets folder. 
+
+cp $GODEL_LIBRARY_PATH/assets/* $PROJECT_HOME/src/main/assets
+
+You should add appcompat-v4 from Google SDK as a library project as well.
