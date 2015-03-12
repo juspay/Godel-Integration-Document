@@ -87,21 +87,8 @@ In the normal flow, you would simply include the WebView in the view XML of your
 
 To integrate with Godel, you will replace the existing WebView with our Fragment. You could directly include the Fragment as is or use a FrameLayout to inject it later.
 
-## JuspayBrowserFragment
 
-You have to instantiate this Fragment in place of the existing WebView. The below code achieves that. Once this code is added to the view file, you can access this in the onCreate method of your Activity. The Fragment can be initialized in different ways. Each of these ways is explained in the upcoming sections.
-
-```
-<fragment android:name="in.juspay.godel.ui.JuspayBrowserFragment"
-    android:id="@+id/juspayBrowserFragment"
-    android:layout_width="fill_parent"
-    android:layout_height="match_parent" />
-```
-
-
-To get hold of the WebView that is present inside this Fragment, you can invoke getWebView() on the Fragment which would return an instance of JuspayWebView. 
-
-## Initializing the JuspayBrowserFragment
+## Initializing Bundle Parameters
 
 There are three ways of initializing the Juspay browser. 
 Strategy #1 and #2 can be used by anyone (If you are not registered with JusPay simply set orderId as your Payment ID).
@@ -224,4 +211,25 @@ args.putString("udf_type", recharge_type);
 
 browserFragment.setArguments(args);
 ```
+
+# Adding JuspayBrowserFragment to View
+
+As stated above you need to simply replace your current webview with the JuspayBrowserFragment and load the URL (or postURL). You could directly include the Fragment as is or use a FrameLayout to inject it later. Both the integration methods are included below.
+
+## Embedding in layout.xml file
+
+Once this code is added to the view file, you can access this in the onCreate method of your Activity. The Fragment can be initialized in different ways. Each of these ways is explained in the upcoming sections.
+
+```
+<fragment android:name="in.juspay.godel.ui.JuspayBrowserFragment"
+    android:id="@+id/juspayBrowserFragment"
+    android:layout_width="fill_parent"
+    android:layout_height="match_parent" />
+```
+
+When embedding the Fragment directly in view file, there is no way to pass the Bundle to the Fragment. However, the WebView should be initialized by you directly. 
+
+JuspayBrowserFragment browserFragment = (JuspayBrowserFragment) findById(R.id.fragment);
+WebView webView = browserFragment.getWebView();
+webView.loadUrl(paymentAuthenticationUrl);
 
