@@ -16,7 +16,6 @@ The following are the minimum set of permissions required for the library to wor
 <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 ```
 
-
 #### Additional permissions preferred:
 
 ```
@@ -26,11 +25,15 @@ The following are the minimum set of permissions required for the library to wor
 
 
 In order to support sending SMS for handling CITI Bank, we will need SEND_SMS permission. However, this permission is optional. When this permission is not available, CITI Bank card transactions will not be enhanced by the library.
-Manifest file changes
+
+## Manifest file changes
+
 In the manifest file, for the activity that includes our fragment, please ensure that the following properties are defined as follows. You may add any other additional properties as you desire.
+```
 
 <activity
     android:name="com.example.PaymentActivity"
     android:screenOrientation="portrait"
     android:windowSoftInputMode="adjustResize">
-</activity>
+</activity>```
+
