@@ -364,7 +364,8 @@ In case your application uses proguard, please do specify the following rule to 
 -keep class in.juspay.** {;}
 ```
 
-Merchant Checklist
+# Merchant Checklist
+
 Please ensure that the following steps are accomplished to have a cleaner integration.
 1. The AndroidManifest.xml entry for the activity should say android:windowSoftInputMode="adjustResize".
 2. The activity holding the Juspay Fragment should fix the orientation as portrait.
