@@ -216,8 +216,12 @@ args.putString("customerEmail", customer_email); // eg: "support@juspay.in"
 args.putString("customerPhoneNumber", customer_phone_number); // eg: "9829880095"
 args.putSerializable("card_brand", CardBrand.VISA);
 args.putSerializable("card_type", CardType.CREDIT_CARD);
+
+// Custom parameters. Here we send 3 custom key-values related to a recharge transaction.
 args.putString("udf_operator", recharge_operator);
 args.putString("udf_circle", recharge_circle);
 args.putString("udf_type", recharge_type);
+
 browserFragment.setArguments(args);
 ```
+
