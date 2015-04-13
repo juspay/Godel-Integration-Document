@@ -20,7 +20,7 @@
 * [Accessing JuspayWebView from JuspayBrowserFragment](5.md)
 * [Custom Web Clients](6.md)
 * [Track payment status](7.md)
-* [Tracking back button press](8.md)
+* [Handling back button press](8.md)
 * [Was Godel used in the last transaction](9.md)
 * [Proguard Rules](10.md)
 * [Merchant Checklist](11.md)
