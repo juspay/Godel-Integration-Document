@@ -12,7 +12,6 @@
    * [Initializing Bundle Parameters](3.1.md)
        * [Strategy #1: Start BrowserFragment using payment URL](3.1.1.md)
        * [Strategy #2: Start BrowserFragment with ACS information](3.1.2.md)
-       * [Strategy #3: Start BrowserFragment using Order and Card information](3.1.3.md)
    * [Parameters](3.2.md)
 * [Adding JuspayBrowserFragment to View](4.md)
    * [Embedding in layout.xml file](4.1.md)
