@@ -9,3 +9,4 @@ It provides various convenience and security features for users. It also collect
 With Godel, merchants will be able to provide a pleasing payments experience on top of the existing 3D secure infrastructure.
 
 Read Gitbook at: https://www.gitbook.com/read/book/juspay/godel-integration-document
+
