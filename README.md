@@ -1,6 +1,6 @@
 # Introduction
 
-#### Welcome to Juspay Safe Integration Docmentation!
+#### Welcome to Juspay Safe Integration Documentation!
 
 JusPay Safe Browser (Code Name: Godel) reduces friction in Second Factor Authentication for Cards and Netbanking. It is an SDK that can be easily embedded in your Android Mobile app.
 
