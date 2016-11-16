@@ -22,9 +22,9 @@
   * [Using Fragment Manager](4.2.md)
 
 * [Accessing JuspayWebView from JuspayBrowserFragment](5.md)
-* [Customisations](/6.md)
-  * [Custom Web Clients](6.md)
-  * UI Customisations
+* [Customisations](6.1.md)
+  * [Custom Web Clients](6.1.md)
+  * [UI Customisations](6.2.md)
 
 * [Track payment status](7.md)
 * [Handling back button press](8.md)
