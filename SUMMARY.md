@@ -22,7 +22,7 @@
   * [Using Fragment Manager](4.2.md)
 
 * [Accessing JuspayWebView from JuspayBrowserFragment](5.md)
-* [Customisations](6.1.md)
+* [Customisations](6.md)
   * [Custom Web Clients](6.1.md)
   * [UI Customisations](6.2.md)
 
