@@ -8,7 +8,6 @@
 
 * [Getting the SDK](2.md)
   * [Gradle](2.1.md)
-  * [Non Gradle \(or Eclipse style integration](2.2.md)
 
 * [How Godel Works](3.md)
   * [Initializing Bundle Parameters](3.1.md)
